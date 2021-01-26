@@ -1,7 +1,15 @@
 package _06_Intro_To_Hash_Maps;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
 
-public class _02_LogSearch {
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+public class _02_LogSearch implements ActionListener {
   /* 
 	 * Crate a HashMap of Integers for the keys and Strings for the values.
 	 * Create a GUI with three buttons. 
@@ -29,5 +37,74 @@ public class _02_LogSearch {
 	 * 				is not in the list. 
 	 *
 	 * */
-	
+	HashMap<Integer, String> logSearch = new HashMap<Integer, String>();
+	JFrame frame = new JFrame("_02_LogSearch");
+	JPanel panel = new JPanel();
+	JButton button1 = new JButton("Add Entry");
+	JButton button2 = new JButton("Search by ID");
+	JButton button3 = new JButton("View List");
+	JButton button4= new JButton("Remove Entry");
+	int idNum=0;
+	String name="";
+	public static void main(String[] args) {
+		_02_LogSearch logSearch02= new _02_LogSearch();	
+		logSearch02.setup();
+	}
+	public void setup() {
+		frame.add(panel);
+		panel.add(button1);
+		panel.add(button2);
+		panel.add(button3);
+		panel.add(button4);
+		button1.addActionListener(this);
+		button2.addActionListener(this);
+		button3.addActionListener(this);
+		button4.addActionListener(this);
+		frame.setVisible(true);
+		frame.pack();
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==button1) {
+			String id = JOptionPane.showInputDialog("Enter an ID number");
+			idNum= Integer.parseInt(id);
+			name= JOptionPane.showInputDialog("Enter a name");
+			logSearch.put(idNum, name);
+		}
+		if(e.getSource()==button2) {
+			String inputID= JOptionPane.showInputDialog("Enter the ID number you would like to search for");
+			int searchID= Integer.parseInt(inputID);
+			System.out.println(idNum);
+			if(logSearch.containsKey(searchID)) {
+				JOptionPane.showMessageDialog(null, logSearch.get(searchID));
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "User does not exist");
+			}
+			
+		}
+		if(e.getSource()==button3) {
+			for (int i = 0; i < logSearch.keySet().size(); i++) {
+				 idNum= (int) logSearch.keySet().toArray()[i];
+				 name=logSearch.get(idNum);
+					System.out.println("ID: "+ idNum+ " Name: " + name);
+			}
+		}
+		if(e.getSource()==button4) {
+			String inputID= JOptionPane.showInputDialog("Enter the ID number you would like to search for");
+			int searchID= Integer.parseInt(inputID);
+			System.out.println(idNum);
+			if(searchID==idNum) {
+				
+				logSearch.remove(name, searchID);
+				JOptionPane.showMessageDialog(null, "The person and ID have been removed");
+		
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "User does not exist");
+			}
+			
+		}
+	}
 }

@@ -18,7 +18,15 @@ public class _05_LongChipCompetition {
 		_05_LongChipCompetition lcc = new _05_LongChipCompetition();
 		
 	}
-	
+	void findLongestChip() {
+		int longestChip = 0;
+		for (int i = 0; i < 5; i++) {
+			if (longestChip < i) {
+				i = longestChip;
+				System.out.println(getTheBand());
+			}
+		}
+	}
 	private void initializeBeatles() {
 		Beatle george = new Beatle("George");
 		Beatle john = new Beatle("John");
