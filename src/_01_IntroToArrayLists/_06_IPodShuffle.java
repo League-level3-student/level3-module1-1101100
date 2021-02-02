@@ -20,9 +20,9 @@ public class _06_IPodShuffle implements ActionListener{
 	JButton b3 = new JButton();
 	public _06_IPodShuffle() {
 		// 1. Use the Song class the play the demo.mp3 file.
-		b1.setText("For The Night");
-		b2.setText("Got it on Me");
-		b3.setText("You Better Move");
+		b1.setText("song1");
+		b2.setText("song2");
+		b3.setText("song3");
 		b1.addActionListener(this);
 		b2.addActionListener(this);
 		b3.addActionListener(this);
@@ -38,7 +38,7 @@ public class _06_IPodShuffle implements ActionListener{
 		 * 2. Congratulations on completing the sound check! * Now we want to make an
 		 * iPod Shuffle that plays random music. * Create an ArrayList of Songs and a
 		 * "Surprise Me!" button that will play a random song when it is clicked. * If
-		 * you're really cool, you can stop all the songs, before playing a new one on
+		 * you' re really cool, you can stop all the songs, before playing a new one on
 		 * subsequent button clicks.
 		 */
 		
@@ -51,6 +51,18 @@ public class _06_IPodShuffle implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		Song night = new Song("For the Night.mp3");
+		Song onMe = new Song("Got it on Me.mp3");
+		Song move = new Song("You Better Move.mp3");
+		JButton buttonPressed =(JButton) e.getSource();
+		if (buttonPressed.equals(b1)) {
+			night.play();
 		
+		} else if (buttonPressed.equals(b2)) {
+			onMe.play();
+	
+		}else if (buttonPressed.equals(b3)) {
+			move.play();
+		}
 	}
 }

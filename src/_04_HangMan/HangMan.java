@@ -10,37 +10,147 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class HangMan{
-	String word;
-	int length;
-	String text = "";
+public class HangMan implements KeyListener{
+	JFrame frame = new JFrame();
+	JLabel label = new JLabel();
+	JPanel panel = new JPanel();
+	JLabel spaceLabel = new JLabel("          ");
+	String number;
 	Stack<String> words = new Stack<String>();
-	public static void main(String[] args) {
-		HangMan hangman = new HangMan();
-		hangman.setup();
+	Stack<String> wrongLetters = new Stack<String>();
+	int r;
+	String word;
+	int life = 6;
+	int wordLength = 0;
+	String labelText = "";
+	String keys;
+	String again;
+	int guessAmount;
+	
+	public HangMan() {
+		newGame();
+	}
+	void setup() {
+		frame.add(panel);
+		panel.add(label);
+		panel.add(spaceLabel);
+		frame.setTitle("Hang Man");
+		frame.addKeyListener(this);
+		label.addKeyListener(this);
+		labelText = "";
+		life = 6;
+		wrongLetters.clear();
+		convert();
+		frame.setVisible(true);
+		frame.pack();
+	}
+	private void newGame() {
+		number = JOptionPane.showInputDialog("How many words would you like to guess?");
+		guessAmount = Integer.parseInt(number);
+		for (int i = 0; i <= guessAmount; i++) {
+			if (words.size() < guessAmount) {
+				String random = Utilities.readRandomLineFromFile("dictionary.txt");
+				words.add(random);
+			}
+		}
+		setup();
 		
 	}
-	
-	void setup() {
-		String dictionary = Utilities.readRandomLineFromFile("dictionary.txt");
-		words.push(dictionary);
-		word = words.pop().toString();
-		length = word.length();
-		JFrame frame = new JFrame();
-		JLabel label = new JLabel();
-		JPanel panel = new JPanel();
-		frame.setSize(500, 500);
-		panel.add(label);
-		frame.add(panel);
-		frame.setVisible(true);
+	void convert() {
+		if (!words.isEmpty()) {
+			word = words.pop();
+		}
+		wordLength = word.length();
+		for (int i = 0; i < wordLength; i++) {
+			labelText += "_ ";
+		}
+		label.setText(labelText);
+		frame.pack();
+		frame.repaint();
 	}
-	
-	void guessWord() {
-		for(int i = 0; i < length ; i++) {
-			text += "_ ";
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		char key = e.getKeyChar();
+		String keyPressed = String.valueOf(key);
+		if (word.contains(keyPressed)) {
+			String newLabelText = "";
+			for (int i = 0; i < wordLength; i++) {
+				if (word.charAt(i) == key) {
+					newLabelText += key;
+				} else {
+					newLabelText += labelText.charAt(i * 2);
+
+				}
+				newLabelText += " ";
+			}
+
+			labelText = newLabelText;
+			label.setText(labelText);
+			frame.repaint();
+			if (!labelText.contains("_")) {
+				if (guessAmount > 1) {
+					JOptionPane.showMessageDialog(null, "Correct, next word.");
+					guessAmount -= 1;
+					frame.dispose();
+					setup();
+				} else if (guessAmount == 1) {
+					again = JOptionPane.showInputDialog(null, "You win! Would you like to play again? (y/n)");
+					if (again.contains("y")) {
+						frame.dispose();
+						newGame();
+					} else {
+						System.exit(0);
+					}
+				}
+			}
+
+		} else {
+			if (wrongLetters.contains(keyPressed)) {
+				JOptionPane.showMessageDialog(null, "You can't guess a letter twice!");
+				life += 1;
+			}
+			if (!word.contains(keyPressed)) {
+				wrongLetters.add(keyPressed);
+				life -= 1;
+			}
+			JOptionPane.showMessageDialog(null, "You have " + life + " live(s) left.");
+		}
+
+		if (life == 0) {
+			if (guessAmount == 1) {
+				System.out.println("The word was " + word);
+				JOptionPane.showMessageDialog(null, "GAME OVER!");
+				again = JOptionPane.showInputDialog("Would you like to play a new game? (y/n)");
+				if (again.contains("y")) {
+					frame.dispose();
+					newGame();
+				} else {
+					frame.dispose();
+				}
+			} else if (guessAmount > 1) {
+				System.out.println("The word was " + word);
+				String keep = JOptionPane.showInputDialog("Would you like keep playing? (y/n)");
+				if (keep.contains("y")) {
+					guessAmount -= 1;
+					frame.dispose();
+					setup();
+				} else {
+					System.exit(0);
+				}
+			}
 		}
 		
 	}
-	
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
