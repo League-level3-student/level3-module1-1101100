@@ -96,15 +96,12 @@ public class _02_LogSearch implements ActionListener {
 			int searchID= Integer.parseInt(inputID);
 			System.out.println(idNum);
 			if(searchID==idNum) {
-				
 				logSearch.remove(name, searchID);
 				JOptionPane.showMessageDialog(null, "The person and ID have been removed");
-		
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "User does not exist");
 			}
-			
 		}
 	}
 }
